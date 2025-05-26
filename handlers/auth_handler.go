@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"be-sakoola/config"
+	"be-sakoola/internal/dto"
 	"be-sakoola/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -11,21 +12,10 @@ import (
 	"time"
 )
 
-type RegisterRequest struct {
-	Name     string `json:"name" binding:"required"`
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"Password" binding:"required,min=6"`
-}
-
-type LoginRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
-}
-
 var jwtKey = []byte("sangat-rahasia")
 
 func Register(c *gin.Context) {
-	var req RegisterRequest
+	var req dto.RegisterRequest
 
 	//Validasi input dari body
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -84,7 +74,7 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var req LoginRequest
+	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -140,8 +130,4 @@ func Profile(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"user": user})
-}
-
-func GetPost(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "OK!"})
 }

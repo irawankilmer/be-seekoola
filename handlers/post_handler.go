@@ -2,20 +2,11 @@ package handlers
 
 import (
 	"be-sakoola/config"
+	"be-sakoola/internal/dto"
 	"be-sakoola/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
-
-type CreatePostRequest struct {
-	Title string `json:"title" binding:"required"`
-	Body  string `json:"body" binding:"required"`
-}
-
-type UpdatePostRequest struct {
-	Title string `json:"title" binding:"required"`
-	Body  string `json:"body" binding:"required"`
-}
 
 func GetAllPosts(c *gin.Context) {
 	var posts []models.Post
@@ -34,7 +25,7 @@ func GetAllPosts(c *gin.Context) {
 }
 
 func CreatePost(c *gin.Context) {
-	var req CreatePostRequest
+	var req dto.CreatePostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -71,7 +62,7 @@ func CreatePost(c *gin.Context) {
 }
 
 func UpdatePost(c *gin.Context) {
-	var req UpdatePostRequest
+	var req dto.UpdatePostRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
