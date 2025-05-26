@@ -1,0 +1,25 @@
+POST http://localhost:8080/api/register
+Content-Type: application/json
+
+{
+    "name": "Ripa Eliya Sari",
+    "email": "rEliyaS@example.com",
+    "password": "password123"
+}
+
+###
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+    "email": "rEliyaS@example.com",
+    "password": "password123"
+}
+
+
+### GET request to route server
+GET http://localhost:8080/api/dashboard/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJFbGl5YVNAZXhhbXBsZS5jb20iLCJleHAiOjE3NDgzNTA2ODIsInJvbGVzIjpbeyJpZCI6MSwibmFtZSI6ImFkbWluIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDUtMjZUMTU6Mzg6NDAuODMyKzA3OjAwIiwidXBkYXRlZF9hdCI6IjIwMjUtMDUtMjZUMTU6Mzg6NDAuODMyKzA3OjAwIn1dLCJ1c2VyX2lkIjo1fQ.ochBghvg54gbi2B59D2aLdncRyZ2ucN62mRtF-rfucU
+
+###

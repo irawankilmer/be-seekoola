@@ -2,6 +2,7 @@ package routes
 
 import (
 	"be-sakoola/handlers"
+	"be-sakoola/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,4 +11,10 @@ func SetupRoutes(r *gin.Engine) {
 
 	api.POST("/register", handlers.Register)
 	api.POST("/login", handlers.Login)
+
+	auth := api.Group("/dashboard")
+	auth.Use(middleware.AuthMiddleware())
+	{
+		auth.GET("/profile", handlers.Profile)
+	}
 }
