@@ -4,9 +4,11 @@ import (
 	"be-sakoola/config"
 	"be-sakoola/models"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
+	"time"
 )
 
 type RegisterRequest struct {
@@ -14,6 +16,13 @@ type RegisterRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"Password" binding:"required,min=6"`
 }
+
+type LoginRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
+}
+
+var jwtKey = []byte("sangat-rahasia")
 
 func Register(c *gin.Context) {
 	var req RegisterRequest
@@ -71,5 +80,53 @@ func Register(c *gin.Context) {
 			"email": user.Email,
 			"roles": user.Roles,
 		},
+	})
+}
+
+func Login(c *gin.Context) {
+	var req LoginRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Cari data user berdasarkan Email
+	var user models.User
+	if err := config.DB.Preload("Roles").Where("email = ?", req.Email).First(&user).Error; err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Email atau Password salah!",
+		})
+		return
+
+	}
+
+	// Cek password
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": "Email atau Password salah!",
+		})
+		return
+	}
+
+	// Generate JWT Token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"email":   user.Email,
+		"roles":   user.Roles,
+		"exp":     time.Now().Add(time.Hour * 24).Unix(), // 24 jam
+	})
+
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Gagal meng-generate token!",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
 	})
 }
