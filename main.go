@@ -1,10 +1,11 @@
 package main
 
 import (
+	"be-sakoola/config"
+	"be-sakoola/migrations"
+	"be-sakoola/models"
+	"be-sakoola/routes"
 	"github.com/gin-gonic/gin"
-	"github.com/irawankilmer/be-sakoola/config"
-	"github.com/irawankilmer/be-sakoola/migrations"
-	"github.com/irawankilmer/be-sakoola/models"
 )
 
 func main() {
@@ -23,11 +24,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Welcome to Enterprise API",
-		})
-	})
+	routes.SetupRoutes(r)
 
 	r.Run()
 }

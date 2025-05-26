@@ -1,8 +1,8 @@
 package migrations
 
 import (
-	"github.com/irawankilmer/be-sakoola/config"
-	"github.com/irawankilmer/be-sakoola/models"
+	"be-sakoola/config"
+	"be-sakoola/models"
 	"log"
 )
 

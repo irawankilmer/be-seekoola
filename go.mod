@@ -1,4 +1,4 @@
-module github.com/irawankilmer/be-sakoola
+module be-sakoola
 
 go 1.24.3
 
