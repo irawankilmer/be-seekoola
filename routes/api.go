@@ -4,6 +4,7 @@ import (
 	"be-sakoola/handlers"
 	"be-sakoola/middleware"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func SetupRoutes(r *gin.Engine) {
@@ -16,10 +17,20 @@ func SetupRoutes(r *gin.Engine) {
 	auth.Use(middleware.AuthMiddleware())
 	{
 		auth.GET("/profile", handlers.Profile)
+		auth.GET("/post", handlers.GetAllPosts)
 
-		admin := auth.Use(middleware.RoleMiddleware())
+		admin := auth.Group("")
+		admin.Use(middleware.RoleMiddleware("admin"))
 		{
-			admin.GET("/post", handlers.GetPost)
+			admin.POST("/post", handlers.CreatePost)
+			admin.PUT("/post/:id", handlers.UpdatePost)
+			admin.DELETE("/post/:id", handlers.DeletePost)
 		}
+	}
+
+	// Cetak semua route yang sudah terdaftar
+	// Hanya untuk development
+	for _, route := range r.Routes() {
+		log.Printf("%-6s -> %s", route.Method, route.Path)
 	}
 }

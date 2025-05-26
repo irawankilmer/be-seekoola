@@ -10,6 +10,7 @@ func RunMigrations() {
 	err := config.DB.AutoMigrate(
 		&models.User{},
 		&models.Role{},
+		&models.Post{},
 	)
 
 	if err != nil {
