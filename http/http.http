@@ -13,13 +13,13 @@ POST http://localhost:8080/api/login
 Content-Type: application/json
 
 {
-    "email": "rEliyaS@example.com",
+    "email": "gJilbi@example.com",
     "password": "password123"
 }
 
 
 ### GET request to route server
-GET http://localhost:8080/api/dashboard/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJFbGl5YVNAZXhhbXBsZS5jb20iLCJleHAiOjE3NDgzNTA2ODIsInJvbGVzIjpbeyJpZCI6MSwibmFtZSI6ImFkbWluIiwiY3JlYXRlZF9hdCI6IjIwMjUtMDUtMjZUMTU6Mzg6NDAuODMyKzA3OjAwIiwidXBkYXRlZF9hdCI6IjIwMjUtMDUtMjZUMTU6Mzg6NDAuODMyKzA3OjAwIn1dLCJ1c2VyX2lkIjo1fQ.ochBghvg54gbi2B59D2aLdncRyZ2ucN62mRtF-rfucU
+GET http://localhost:8080/api/dashboard/post
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdKaWxiaUBleGFtcGxlLmNvbSIsImV4cCI6MTc0ODM1MjM1Nywicm9sZXMiOlt7ImlkIjoyLCJuYW1lIjoidXNlciIsImNyZWF0ZWRfYXQiOiIyMDI1LTA1LTI2VDE4OjAzOjU4LjYyNSswNzowMCIsInVwZGF0ZWRfYXQiOiIyMDI1LTA1LTI2VDE4OjAzOjU4LjYyNSswNzowMCJ9XSwidXNlcl9pZCI6M30.5j6TwTGy70dCHqCS6qbMjus0ejgCmCDMGYj_1azCwHQ
 
 ###

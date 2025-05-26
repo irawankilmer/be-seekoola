@@ -141,3 +141,7 @@ func Profile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
+
+func GetPost(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"message": "OK!"})
+}

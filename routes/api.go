@@ -16,5 +16,10 @@ func SetupRoutes(r *gin.Engine) {
 	auth.Use(middleware.AuthMiddleware())
 	{
 		auth.GET("/profile", handlers.Profile)
+
+		admin := auth.Use(middleware.RoleMiddleware())
+		{
+			admin.GET("/post", handlers.GetPost)
+		}
 	}
 }
