@@ -1,7 +1,7 @@
 package migrations
 
 import (
-	"be-sakoola/config"
+	"be-sakoola/internal/config"
 	"be-sakoola/models"
 	"log"
 )

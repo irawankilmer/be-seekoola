@@ -2,8 +2,9 @@ POST http://localhost:8080/api/register
 Content-Type: application/json
 
 {
-    "name": "Ripa Eliya Sari",
-    "email": "rEliyaS@example.com",
+    "name": "Osup",
+    "email": "osup@example.com",
+    "role": "admin",
     "password": "password123"
 }
 
@@ -13,7 +14,7 @@ POST http://localhost:8080/api/login
 Content-Type: application/json
 
 {
-    "email": "admin@example.com",
+    "email": "osup@example.com",
     "password": "password123"
 }
 

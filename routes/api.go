@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"be-sakoola/handlers"
-	"be-sakoola/middleware"
+	handlers2 "be-sakoola/internal/handlers"
+	middleware2 "be-sakoola/internal/middleware"
 	"github.com/gin-gonic/gin"
 	"log"
 )
@@ -10,21 +10,21 @@ import (
 func SetupRoutes(r *gin.Engine) {
 	api := r.Group("/api")
 
-	api.POST("/register", handlers.Register)
-	api.POST("/login", handlers.Login)
+	api.POST("/register", handlers2.Register)
+	api.POST("/login", handlers2.Login)
 
 	auth := api.Group("/dashboard")
-	auth.Use(middleware.AuthMiddleware())
+	auth.Use(middleware2.AuthMiddleware())
 	{
-		auth.GET("/profile", handlers.Profile)
-		auth.GET("/post", handlers.GetAllPosts)
+		auth.GET("/profile", handlers2.Profile)
+		auth.GET("/post", handlers2.GetAllPosts)
 
 		admin := auth.Group("")
-		admin.Use(middleware.RoleMiddleware("admin"))
+		admin.Use(middleware2.RoleMiddleware("admin"))
 		{
-			admin.POST("/post", handlers.CreatePost)
-			admin.PUT("/post/:id", handlers.UpdatePost)
-			admin.DELETE("/post/:id", handlers.DeletePost)
+			admin.POST("/post", handlers2.CreatePost)
+			admin.PUT("/post/:id", handlers2.UpdatePost)
+			admin.DELETE("/post/:id", handlers2.DeletePost)
 		}
 	}
 

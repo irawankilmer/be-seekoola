@@ -1,21 +1,20 @@
 package handlers
 
 import (
-	"be-sakoola/config"
-	"be-sakoola/internal/dto"
-	"be-sakoola/models"
+	"be-sakoola/internal/dto/request"
+	"be-sakoola/internal/usecase"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/crypto/bcrypt"
-	"log"
 	"net/http"
 	"time"
 )
 
 var jwtKey = []byte("sangat-rahasia")
 
+var authUsecase = usecase.NewAuthUsecase()
+
 func Register(c *gin.Context) {
-	var req dto.RegisterRequest
+	var req request.RegisterRequest
 
 	//Validasi input dari body
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -25,41 +24,11 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// Cek email apa sudah terdaftar
-	var eUser models.User
-	if err := config.DB.Where("email = ?", req.Email).First(&eUser).Error; err == nil {
-		c.JSON(http.StatusConflict, gin.H{
-			"error": "Email sudah terdaftar!",
-		})
-		return
-	}
-
-	// Hash password
-	hPass, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	user, err := authUsecase.Register(req)
 	if err != nil {
-		log.Println("Bcrypt error:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Hash Password gagal!",
-		})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	// Ambil data role default
-	var userRole models.Role
-	config.DB.FirstOrCreate(&userRole, models.Role{
-		Name: "admin",
-	})
-
-	// Simpan user baru ke database
-	user := models.User{
-		Name:     req.Name,
-		Email:    req.Email,
-		Password: string(hPass),
-		Roles: []models.Role{
-			userRole,
-		},
-	}
-	config.DB.Create(&user)
 
 	// Respon
 	c.JSON(http.StatusCreated, gin.H{
@@ -74,7 +43,7 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var req dto.LoginRequest
+	var req request.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -82,21 +51,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Cari data user berdasarkan Email
-	var user models.User
-	if err := config.DB.Preload("Roles").Where("email = ?", req.Email).First(&user).Error; err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Email atau Password salah!",
-		})
-		return
-
-	}
-
-	// Cek password
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Email atau Password salah!",
-		})
+	user, err := authUsecase.Login(req)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 

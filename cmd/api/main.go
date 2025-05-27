@@ -1,7 +1,7 @@
 package main
 
 import (
-	"be-sakoola/config"
+	"be-sakoola/internal/config"
 	"be-sakoola/migrations"
 	"be-sakoola/models"
 	"be-sakoola/routes"
